@@ -8,7 +8,7 @@ QBX:CreateUseableItem('rentalpapers', function(source, item, plate)
 end)
 ]]
 
-RegisterServerEvent('syn_rentals:server:rentalpapers', function(source, plate, model)
+RegisterServerEvent('qbx_rentals:server:rentalpapers', function(source, plate, model)
     local player = QBX:GetPlayer(source)
     local info = {}
     info.citizenid = player.PlayerData.citizenid
@@ -19,7 +19,7 @@ RegisterServerEvent('syn_rentals:server:rentalpapers', function(source, plate, m
     ox_inventory:AddItem(source, 'rentalpapers', 1, info)
 end)
 
-RegisterServerEvent('syn_rentals:server:removepapers', function(source, plate, model)
+RegisterServerEvent('qbx_rentals:server:removepapers', function(source, plate, model)
     local info = {}
     info.rentalplate = plate
     local item = ox_inventory:GetSlotWithItem(source, 'rentalpapers', info)
@@ -60,9 +60,9 @@ local function moneyCheck(source, model, cost, rentalType)
 
 end
 
-lib.callback.register('syn_rentals:server:moneyCheck', moneyCheck)
+lib.callback.register('qbx_rentals:server:moneyCheck', moneyCheck)
 
-lib.callback.register('syn_rentals:server:getTables', function(source, rentalType)
+lib.callback.register('qbx_rentals:server:getTables', function(source, rentalType)
 
     if rentalType == 'locations' then
         return config.rentalLocations
@@ -74,7 +74,7 @@ lib.callback.register('syn_rentals:server:getTables', function(source, rentalTyp
 
 end)
 
-lib.callback.register('syn_rentals:server:spawnVehicle', function(source, model, coords)
+lib.callback.register('qbx_rentals:server:spawnVehicle', function(source, model, coords)
 
     local netId = qbx.spawnVehicle({model = model, spawnSource = coords, warp = GetPlayerPed(source)})
     if not netId or netId == 0 then return end
@@ -83,7 +83,7 @@ lib.callback.register('syn_rentals:server:spawnVehicle', function(source, model,
 
     local plate = GetVehicleNumberPlateText(veh)
     TriggerClientEvent('vehiclekeys:client:SetOwner', source, plate)
-    TriggerEvent('syn_rentals:server:rentalpapers', source, plate, model)
+    TriggerEvent('qbx_rentals:server:rentalpapers', source, plate, model)
     Entity(veh).state.fuel = 100
     return netId
 
@@ -93,7 +93,7 @@ local function deleteVehicle(source, netId)
 
     local vehicle = NetworkGetEntityFromNetworkId(netId)
     local plate = GetVehicleNumberPlateText(vehicle)
-    TriggerEvent('syn_rentals:server:removepapers', source, plate)
+    TriggerEvent('qbx_rentals:server:removepapers', source, plate)
     DeleteEntity(vehicle)
     TriggerClientEvent('ox_lib:notify', source, {
         id = 'vehicleReturn',
@@ -106,4 +106,4 @@ local function deleteVehicle(source, netId)
 
 end
 
-lib.callback.register('syn_rentals:server:deleteVehicle', deleteVehicle)
+lib.callback.register('qbx_rentals:server:deleteVehicle', deleteVehicle)

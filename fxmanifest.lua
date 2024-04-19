@@ -1,7 +1,7 @@
 fx_version 'cerulean'
 game 'gta5'
 
-author 'Carbon#1002'
+author '.crutchie'
 description 'qbx_rentals. This script took insperation from qb-rentals by Carbon#1002 and g-bikerentals by Giana'
 version '0.0.1'
 

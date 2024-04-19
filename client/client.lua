@@ -5,9 +5,9 @@ local cars              = {}
 local bikes             = {}
 local rentalVehicle     = 0
 
-rentalLocations = lib.callback.await('syn_rentals:server:getTables', false, 'locations')
-cars = lib.callback.await('syn_rentals:server:getTables', false, 'car')
-bikes = lib.callback.await('syn_rentals:server:getTables', false, 'bike')
+rentalLocations = lib.callback.await('qbx_rentals:server:getTables', false, 'locations')
+cars = lib.callback.await('qbx_rentals:server:getTables', false, 'car')
+bikes = lib.callback.await('qbx_rentals:server:getTables', false, 'bike')
 
 lib.registerMenu({
     id              = 'rentalMenu',
@@ -29,21 +29,21 @@ lib.registerMenu({
             model = args[scrollIndex].model
             cost = args[scrollIndex].cost
                     
-            TriggerEvent('syn_rentals:client:spawnCar', model, cost, rentalType)
+            TriggerEvent('qbx_rentals:client:spawnCar', model, cost, rentalType)
 
             currentSpawnPoint = 0
         else
   
             if not args[1] == 'returnVehicle' then return end
     
-            TriggerEvent('syn_rentals:client:returnVehicle')
+            TriggerEvent('qbx_rentals:client:returnVehicle')
     
         end
 end)
 
 -- Events
 
-RegisterNetEvent('syn_rentals:client:openMenu', function(rentalType)
+RegisterNetEvent('qbx_rentals:client:openMenu', function(rentalType)
 
     if rentalType == 'car' then
 
@@ -75,7 +75,6 @@ RegisterNetEvent('syn_rentals:client:openMenu', function(rentalType)
 
         local labels = {}
         local args = {}
-        local options = {}
 
         for i = 1, #bikes do
             labels[i] = { label = bikes[i].model, description = 'Rent ' .. bikes[i].model .. ' for $' .. bikes[i].cost}
@@ -83,15 +82,6 @@ RegisterNetEvent('syn_rentals:client:openMenu', function(rentalType)
         end
 
         for k, vehicle in pairs(bikes) do
-
-            options = {
-                { 
-                    label       = vehicle.model .. ' $' .. vehicle.cost,
-                    values      = labels,
-                    args        = args,
-                    close       = true,
-                },
-            }
 
             lib.setMenuOptions('rentalMenu',                 { 
                 label       = vehicle.model .. ' $' .. vehicle.cost,
@@ -103,7 +93,6 @@ RegisterNetEvent('syn_rentals:client:openMenu', function(rentalType)
 
         end
 
-
         lib.showMenu('rentalMenu')
 
     end
@@ -111,7 +100,7 @@ RegisterNetEvent('syn_rentals:client:openMenu', function(rentalType)
 
 end)
 
-RegisterNetEvent('syn_rentals:client:spawnCar', function(model, cost, rentalType)
+RegisterNetEvent('qbx_rentals:client:spawnCar', function(model, cost, rentalType)
 
     local player = PlayerPedId()
     local spawnPoint
@@ -133,7 +122,7 @@ RegisterNetEvent('syn_rentals:client:spawnCar', function(model, cost, rentalType
         return
     end
 
-    canPurchase = lib.callback.await('syn_rentals:server:moneyCheck', false, model, cost, rentalType)
+    canPurchase = lib.callback.await('qbx_rentals:server:moneyCheck', false, model, cost, rentalType)
 
     if not canPurchase then             
         lib.notify({
@@ -144,17 +133,17 @@ RegisterNetEvent('syn_rentals:client:spawnCar', function(model, cost, rentalType
         return
     end
 
-    local netId = lib.callback.await('syn_rentals:server:spawnVehicle', false, model, spawnPoint)
+    local netId = lib.callback.await('qbx_rentals:server:spawnVehicle', false, model, spawnPoint)
 
     rentalVehicle = netId
 
 end)
 
-RegisterNetEvent('syn_rentals:client:returnVehicle', function()
+RegisterNetEvent('qbx_rentals:client:returnVehicle', function()
 
     if rentalVehicle == 0 then return end
 
-    local delVeh = lib.callback.await('syn_rentals:server:deleteVehicle', false, rentalVehicle)
+    local delVeh = lib.callback.await('qbx_rentals:server:deleteVehicle', false, rentalVehicle)
 
     if delVeh then
         rentalVehicle = 0
@@ -269,9 +258,9 @@ CreateThread(function()
                     onSelect = function()
                         currentSpawnPoint = rentals.spawnPoint
                         if rentals.rentalType == 'car' then
-                            TriggerEvent('syn_rentals:client:openMenu', rentals.rentalType)
+                            TriggerEvent('qbx_rentals:client:openMenu', rentals.rentalType)
                         elseif rentals.rentalType == 'bike' then
-                            TriggerEvent('syn_rentals:client:openMenu', rentals.rentalType)
+                            TriggerEvent('qbx_rentals:client:openMenu', rentals.rentalType)
                         end
                     end,
                     distance = 2,
