@@ -29,6 +29,8 @@ Add the following to your ox_inventory items under ox_inventory>data>items.lua
 		description = 'Rental papers for your rented vehicle',
 	},
 ```
+For the item image drop the png file under images named rentalpapers.png under ox_inventory>web>images
+
 # Optional
 *To display the actual metadata of the rental papers (firstname, lastname, rentalmodel, and rentalplate)*
 Add the following to any client side script. If you already have this somewhere in another script just append it to that and change the order of the metadata labels.
@@ -48,12 +50,12 @@ CreateThread(function()
 end)
 ```
 # Screenshots
-![bike menu](bike_menu-1.png)
-![bike target](bike_target-1.png)
-![car menu](car_menu-1.png)
-![car target](car_target-1.png)
-![rental papers metadata](rentalpapers_metadata.png)
-![rental papers item](rentalpapers_item.png)
+![bike menu](images/bike_menu-1.png)
+![bike target](images/bike_target-1.png)
+![car menu](images/car_menu-1.png)
+![car target](images/car_target-1.png)
+![rental papers metadata](images/rentalpapers_metadata.png)
+![rental papers item](images/rentalpapers_item.png)
 
 # Change Logs
 - 0.0.1 - Inital release
